@@ -1,0 +1,23 @@
+pool:
+  vmImage: windows-latest
+
+steps:
+  - task: NuGetToolInstaller@1
+    displayName: 'Install NuGet Tool'
+
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '**/*.sln'
+    displayName: 'Restore NuGet Packages'
+
+  - task: VSBuild@1
+    inputs:
+      solution: '**/*.sln'
+      configuration: 'Release'
+    displayName: 'Build Solution'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: '$(build.artifactStagingDirectory)'
+      PathtoPublish: $(build.artifactStagingDirectory)
+    displayName: 'Publish Build Artifacts'
