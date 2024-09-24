@@ -7,12 +7,12 @@ steps:
 
   - task: NuGetCommand@2
     inputs:
-      restoreSolution: '**/*.sln'
+      restoreSolution: '$(solution)'  # Adjust the path if necessary
     displayName: 'Restore NuGet Packages'
 
   - task: VSBuild@1
     inputs:
-      solution: '**/*.sln'
+      solution: '$(solution)'
       configuration: 'Release'
     displayName: 'Build Solution'
 
