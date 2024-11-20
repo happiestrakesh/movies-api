@@ -1,0 +1,31 @@
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  archivePath: 'build'
+  major: 'Ver 1'
+  minor: 0
+  revision: '0-beta'
+ 
+name: $(major).$(minor).$(revision).$(Build.BuildId)
+
+steps:
+  - task: NuGetToolInstaller@1
+    displayName: 'Install NuGet Tool'
+
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '**/*.sln'  # Use a wildcard to restore all solutions in the repo
+    displayName: 'Restore NuGet Packages'
+
+  - task: VSBuild@1
+    inputs:
+      solution: '**/*.sln'  # Adjust the path if necessary
+      configuration: 'Release'
+    displayName: 'Build Solution'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: '$(archivePath)'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'  # Ensure you set this directory correctly
+    displayName: 'Publish Build Artifacts'
